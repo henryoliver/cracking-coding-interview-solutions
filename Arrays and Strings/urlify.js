@@ -16,7 +16,7 @@ function urlify(string = '') {
     // Gracefully handle type and Falsy values
     if (typeof string !== 'string' || string === '') {
         console.error('Parameter should be a valid non-empty string');
-        return string;
+        return false;
     }
 
     const encodedArray = string.trim().split('');
@@ -48,7 +48,7 @@ function urlify(string = '') {
     // Gracefully handle type and Falsy values
     if (typeof string !== 'string' || string === '') {
         console.error('Parameter should be a valid non-empty string');
-        return string;
+        return false;
     }
 
     // return encodeURI(string.trim());
@@ -58,21 +58,29 @@ function urlify(string = '') {
 
 // Test cases (black box - unit testing)
 const testCases = [
+    // Normal
+    // Data that is typical (expected) and should be accepted by the system.
     { assert: urlify('hello world'), expected: 'hello%20world' },
     { assert: urlify('Mr John Smith  '), expected: 'Mr%20John%20Smith' },
     
-    // Boundary conditions (empty lists, singleton list, large numbers, small numbers)
-    { assert: urlify(), expected: '' },
-    { assert: urlify(0), expected: 0 },
-    { assert: urlify(''), expected: '' },
-    { assert: urlify([]), expected: [] },
-    { assert: urlify({}), expected: {} },
-    { assert: urlify(NaN), expected: NaN },
-    { assert: urlify(null), expected: null },
-    { assert: urlify(false), expected: false },
-    { assert: urlify(undefined), expected: undefined },
+    // Boundary data (extreme data, edge case)
+    // Data at the upper or lower limits of expectations that should be accepted by the system.
+    { assert: urlify('h '), expected: 'h' },
+    { assert: urlify('Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium          '), expected: 'Sed%20ut%20perspiciatis%20unde%20omnis%20iste%20natus%20error%20sit%20voluptatem%20accusantium' },
 
-    // Extremes
+    // Abnormal data (erroneous data)
+    // Data that falls outside of what is acceptable and should be rejected by the system.
+    { assert: urlify(), expected: false },
+    { assert: urlify(0), expected: false },
+    { assert: urlify(''), expected: false },
+    { assert: urlify([]), expected: false },
+    { assert: urlify({}), expected: false },
+    { assert: urlify(NaN), expected: false },
+    { assert: urlify(null), expected: false },
+    { assert: urlify(false), expected: false },
+    { assert: urlify(new Set()), expected: false },
+    { assert: urlify(new Map()), expected: false },
+    { assert: urlify(undefined), expected: false },
 ];
 
 // Run tests
