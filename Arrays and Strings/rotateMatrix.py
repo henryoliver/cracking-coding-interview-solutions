@@ -7,7 +7,7 @@ def rotateMatrix(matrix=[]):
 
     Rotate the matrix by 90 degrees clockwise.
 
-    list: matrix - Two-dimensional array
+    list: matrix - Two-dimensional list
     return: List matrix rotated clockwise matrix
     '''
     # Gracefully handle type and Falsy values
@@ -47,8 +47,8 @@ def rotateMatrix(matrix=[]):
 
     Rotate the matrix by 90 degrees clockwise.
 
-    array: matrix - Two-dimensional array
-    return: matrix - Rotated clockwise matrix
+    list: matrix - Two-dimensional list
+    return: List matrix rotated clockwise matrix
     '''
     # Gracefully handle type and Falsy values
     if (not isinstance(matrix, list) or len(matrix) == 0):
