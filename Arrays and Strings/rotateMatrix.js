@@ -1,10 +1,10 @@
 /**
- * Solution 1 - Transpose Matrix by transforming rows into columns swapping diagonally.
+ * Solution 1 - Transpose a square (N x N) Matrix by transforming rows into columns swapping diagonally.
  *
  * Complexity Analysis
  * O(n^2) time | O(1) space
  *
- * Rotate the matrix by 90 degrees clockwise.
+ * Rotate the square (N x N) matrix by 90 degrees clockwise.
  *
  * @param {array} matrix - Two dimensional array
  * @returns {array} Rotated clockwise matrix
@@ -16,7 +16,7 @@ function rotateMatrix(matrix = []) {
         return false;
     }
 
-    // Check if it's a perfect square matrix
+    // Check if it's a square (N x N) matrix
     if (matrix.length < 2 || matrix.length !== matrix[0].length) {
         console.error('Parameter should be a valid perfect square matrix');
         return matrix;
@@ -51,7 +51,7 @@ function rotateMatrix(matrix = []) {
  * Complexity Analysis
  * O(n^2) time | O(1) space
  *
- * Rotate the matrix by 90 degrees clockwise.
+ * Rotate the square (N x N) matrix by 90 degrees clockwise.
  *
  * @param {array} matrix - Two dimensional array
  * @returns {array} Rotated clockwise matrix
@@ -63,7 +63,7 @@ function rotateMatrix(matrix = []) {
         return false;
     }
 
-    // Check if it's a perfect square matrix
+    // Check if it's a square (N x N) matrix
     if (matrix.length < 2 || matrix.length !== matrix[0].length) {
         console.error('Parameter should be a valid perfect square matrix');
         return matrix;
