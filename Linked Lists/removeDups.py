@@ -28,7 +28,7 @@ def removeDups(linkedList={}):
             trackedData.add(currNode['data'])
             prevNode = currNode
 
-        currNode = currNode['next'];
+        currNode = currNode['next']
 
     return linkedList
 
