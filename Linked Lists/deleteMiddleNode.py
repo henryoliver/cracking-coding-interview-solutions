@@ -27,7 +27,6 @@ def kthToLast(linkedList={}, k=0):
     if (linkedListLength < 3):
         return linkedList
 
-
     currNodeIndex = 1
     middleNodeIndex = linkedListLength // 2
 
