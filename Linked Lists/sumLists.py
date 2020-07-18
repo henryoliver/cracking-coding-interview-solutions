@@ -3,121 +3,98 @@ class Node(dict):
         self.data = data
         self.next = next
 
-def partition(linkedList={}, partition=0):
+def sumLists(linkedListOne={}, linkedListTwo={}):
     '''
-    Solution 1 - Stable approach - Two partitions (left/right) not chaging linked list order
+    Solution - Traverse lists in parallel suming the nodes
 
     Complexity Analysis
     O(n) time | O(n) space
 
-    Partition a linked list around a value x
+    Adds the two numbers and returns the sum as a linked list
 
-    dict: linkedList 
-    integer: partition
-    return: Linked list re-arranged partition by x    
+    dict: linkedListOne
+    dict: linkedListTwo
+    return: Linked list with sumup numbers    
     '''
     # Gracefully handle type and Falsy values
-    if (not isinstance(linkedList, dict) or bool(linkedList) == False or not isinstance(partition, int) or partition < 0):
-        print('Arguments should be a valid non-empty dictionary and a positive valid integer')
+    if (not isinstance(linkedListOne, dict) or bool(linkedListOne) == False or not isinstance(linkedListTwo, dict) or bool(linkedListTwo) == False):
+        print('Arguments should be a valid non-empty dictionary')
         return False
 
-    leftPartition = Node()
-    rightPartition = Node()
+    sumLinkedList = Node(0)
+    currSumLinkedList = sumLinkedList
 
-    leftCurrNode = leftPartition
-    rightCurrNode = rightPartition
+    currNodeOne = linkedListOne
+    currNodeTwo = linkedListTwo
 
-    currNode = linkedList
+    carryOver = 0
 
-    while (currNode != None):
-        if (currNode['data'] < partition):
-            leftCurrNode['next']= currNode
-            leftCurrNode = leftCurrNode['next']
-        else:
-            rightCurrNode['next'] = currNode
-            rightCurrNode = rightCurrNode['next']
+    while (currNodeOne != None or currNodeTwo != None or carryOver > 0):
+        nodeSum = 0
 
-        currNode = currNode['next']
+        if (currNodeOne):
+            nodeSum += currNodeOne['data']
+            currNodeOne = currNodeOne['next']
 
-    rightCurrNode['next'] = None
-    leftCurrNode['next'] = rightPartition['next']
+        if (currNodeTwo):
+            nodeSum += currNodeTwo['data']
+            currNodeTwo = currNodeTwo['next']
 
-    return leftPartition['next']
+        nodeSum += carryOver
+        carryOver = nodeSum // 10
 
-def partition(linkedList={}, partition=0):
-    '''
-    Solution 2 - Not Stable approach - Rearrange the elements growing the linked list at the head and tail
+        currSumLinkedList['next'] = dict({ 'data': nodeSum % 10, 'next': None })
+        currSumLinkedList = currSumLinkedList['next']
 
-    Complexity Analysis
-    O(n) time | O(1) space
-
-    Partition a linked list around a value x
-
-    dict: linkedList 
-    integer: partition
-    return: Linked list re-arranged partition by x    
-    '''
-    # Gracefully handle type and Falsy values
-    if (not isinstance(linkedList, dict) or bool(linkedList) == False or not isinstance(partition, int) or partition < 0):
-        print('Arguments should be a valid non-empty dictionary and a positive valid integer')
-        return False
-
-    head = linkedList
-    tail = linkedList
-
-    while (linkedList != None):
-        linkedListNext = linkedList['next']
-
-        if (linkedList['data'] < partition):
-            linkedList['next']= head
-            head = linkedList
-        else:
-            tail['next'] = linkedList
-            tail = linkedList
-
-        linkedList = linkedListNext
-
-    tail['next'] = None
-
-    return head
+    return sumLinkedList['next']
 
 # Test cases (black box - unit testing)
 testCases = [
     # Normal
     # Data that is typical (expected) and should be accepted by the system.
     { 
-        'assert': partition({ 'data': 5, 'next': { 'data': 2, 'next': { 'data': 9, 'next': { 'data': 0, 'next': None } } } }, 5),
-        'expected': { 'data': 2, 'next': { 'data': 0, 'next': { 'data': 5, 'next': { 'data': 9, 'next': None } } } } 
+        'assert': sumLists({ 'data': 5, 'next': { 'data': 2, 'next': { 'data': 4, 'next': None } } }, { 'data': 3, 'next': { 'data': 8, 'next': { 'data': 1, 'next': None } } }),
+        'expected': { 'data': 8, 'next': { 'data': 0, 'next': { 'data': 6, 'next': None } } }
     },
     { 
-        'assert': partition({ 'data': 53, 'next': { 'data': 92, 'next': { 'data': 23, 'next': { 'data': 19, 'next': { 'data': 84, 'next': None } } } } }, 23),
-        'expected': { 'data': 19, 'next': { 'data': 53, 'next': { 'data': 92, 'next': { 'data': 23, 'next': { 'data': 84, 'next': None } } } } } 
+        'assert': sumLists({ 'data': 8, 'next': { 'data': 5, 'next': { 'data': 7, 'next': None } } }, { 'data': 2, 'next': { 'data': 9, 'next': { 'data': 0, 'next': None } } }),
+        'expected': { 'data': 0, 'next': { 'data': 5, 'next': { 'data': 8, 'next': None } } }
     },
     { 
-        'assert': partition({ 'data': 83, 'next': { 'data': 12, 'next': { 'data': 87, 'next': { 'data': 33, 'next': { 'data': 54, 'next': None } } } } }, 87),
-        'expected': { 'data': 83, 'next': { 'data': 12, 'next': { 'data': 33, 'next': { 'data': 54, 'next': { 'data': 87, 'next': None } } } } } 
+        'assert': sumLists({ 'data': 9, 'next': { 'data': 8, 'next': { 'data': 7, 'next': None } } }, { 'data': 4, 'next': { 'data': 9, 'next': { 'data': 0, 'next': { 'data': 8, 'next': None } } } }),
+        'expected': { 'data': 3, 'next': { 'data': 8, 'next': { 'data': 8, 'next': { 'data': 8, 'next': None } } } }
     },
-
+    { 
+        'assert': sumLists(
+            { 'data': 5, 'next': { 'data': 1, 'next': { 'data': 8, 'next': { 'data': 9, 'next': { 'data': 8, 'next': None }} } } },
+            { 'data': 4, 'next': { 'data': 9, 'next': { 'data': 0, 'next': { 'data': 8, 'next': None } } } }
+        ),
+        'expected': { 'data': 9, 'next': { 'data': 0, 'next': { 'data': 9, 'next': { 'data': 7, 'next': { 'data': 9, 'next': None } } } } }
+    },
     # Boundary data (extreme data, edge case)
     # Data at the upper or lower limits of expectations that should be accepted by the system.
+    { 
+        'assert': sumLists({ 'data': 1, 'next': None }, { 'data': 1, 'next': None }),
+        'expected': { 'data': 2, 'next': None }
+    },
 
     # Abnormal data (erroneous data)
     # Data that falls outside of what is acceptable and should be rejected by the system.
-    { 'assert': partition(), 'expected': False },
-    { 'assert': partition(0), 'expected': False },
-    { 'assert': partition(''), 'expected': False },
-    { 'assert': partition([]), 'expected': False },
-    { 'assert': partition(()), 'expected': False },
-    { 'assert': partition({}), 'expected': False },
-    { 'assert': partition(None), 'expected': False },
-    { 'assert': partition(False), 'expected': False }
+    { 'assert': sumLists(), 'expected': False },
+    { 'assert': sumLists(0), 'expected': False },
+    { 'assert': sumLists(''), 'expected': False },
+    { 'assert': sumLists([]), 'expected': False },
+    { 'assert': sumLists(()), 'expected': False },
+    { 'assert': sumLists({}), 'expected': False },
+    { 'assert': sumLists(None), 'expected': False },
+    { 'assert': sumLists(False), 'expected': False }
 ]
 
 # Run tests
 for (index, test) in enumerate(testCases):
     print(f'# Test {index + 1}')
     print(f'Actual: {test["assert"]}')
-    print(f'expected: {test["expected"]}')
+    print(f'Expected: {test["expected"]}')
     print('🤘 Test PASSED 🤘' if test["assert"] == test["expected"] else '👎 Test FAILED 👎', '\n')
 
 
