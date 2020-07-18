@@ -1,8 +1,4 @@
-// Factory functions approach (composition)
-const createNode = ({ 
-    data = Infinity, 
-    next = null 
-} = {}) => ({ data, next });
+import { factoryLinkedListNode as createNode } from '../../Data Structures/linkedList.js';
 
 /**
  * Solution - Traverse lists in parallel suming the nodes

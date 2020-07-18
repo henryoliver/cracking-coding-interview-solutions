@@ -1,0 +1,20 @@
+{
+    "name": "cracking-the-coding-interview",
+    "version": "1.0.0",
+    "description": "My solutions for Cracking the Coding Interview",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/henryoliver/cracking-coding-interview-solutions.git"
+    },
+    "author": "Henry Oliver",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/henryoliver/cracking-coding-interview-solutions/issues"
+    },
+    "homepage": "https://github.com/henryoliver/cracking-coding-interview-solutions#readme"
+}

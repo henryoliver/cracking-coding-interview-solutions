@@ -1,7 +1,7 @@
-class Node(dict):
-    def __init__(self, data=float('inf'), next=None):
-        self.data = data
-        self.next = next
+import sys
+sys.path.append('../../Data Structures')
+
+from linkedList import Node
 
 def partition(linkedList={}, partition=0):
     '''
