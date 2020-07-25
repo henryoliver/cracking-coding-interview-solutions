@@ -19,7 +19,7 @@ function isPalindromePermutation(string = '') {
         return false;
     }
 
-    let charsMap = new Map();
+    const charsMap = new Map();
 
     for (let char of string.toLowerCase()) {
         if (char === ' ') {
@@ -35,7 +35,7 @@ function isPalindromePermutation(string = '') {
 
     let oddCount = 0;
 
-    for (const [key, value] of charsMap) {
+    for (const value of charsMap.values()) {
         if (value % 2 === 1) {
             oddCount += 1;
         }
