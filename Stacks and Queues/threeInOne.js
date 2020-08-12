@@ -1,136 +1,83 @@
+import { factoryStack as createStack } from '../../Data Structures/stack.js';
+
 /**
  * Solution
  *
  * Complexity Analysis
  * O(n) time | O(1) space
  *
- * Determine if the two linked lists intersects
+ * Use a single array to implement three stacks
  *
- * @param {object} linkedListOne
- * @param {object} linkedListTwo
- * @returns {object} Intersected node
+ * @param {array} array
+ * @returns {object} Three stacks
  */
-function threeInOne(linkedListOne = {}, linkedListTwo = {}) {
+function threeInOne(array = []) {
     // Gracefully handle type and Falsy values
-    if (
-        typeof linkedListOne !== 'object' ||
-        Object.keys(linkedListOne || {}).length === 0 ||
-        typeof linkedListTwo !== 'object' ||
-        Object.keys(linkedListTwo || {}).length === 0
-    ) {
-        console.error('Parameters must be a valid non-empty object');
+    if (Array.isArray(array) === false || array.length === 0) {
+        console.error('Parameter should be a valid non-empty array');
         return false;
     }
 
-    let linkListOneLength = 0;
-    let linkListTwoLength = 0;
+    const stacks = [];
+    const stacksMaxLength = Math.floor(array.length / 3);
 
-    let currNodeOne = linkedListOne;
-    let currNodeTwo = linkedListTwo;
+    let currStack = createStack();
+    let stackLimitIndex = stacksMaxLength;
 
-    // Traverse both linked lists till their tails and get lengths
-    while (currNodeOne.next !== null || currNodeTwo.next !== null) {
-        if (currNodeOne.next !== null) {
-            linkListOneLength += 1;
-            currNodeOne = currNodeOne.next;
-        }
+    array.forEach((item, index) => {
+        currStack.push(item);
 
-        if (currNodeTwo.next !== null) {
-            linkListTwoLength += 1;
-            currNodeTwo = currNodeTwo.next;
-        }
-    }
+        if (stackLimitIndex === index + 1) {
+            stacks.push(currStack.peek());
+            currStack = createStack();
 
-    // Check last nodes equality to make sure both intersects at some point
-    if (JSON.stringify(currNodeOne) !== JSON.stringify(currNodeTwo)) {
-        return null;
-    }
-
-    // Reset current nodes
-    currNodeOne = linkedListOne;
-    currNodeTwo = linkedListTwo;
-
-    // Traverse both again pairing current node and comparing it
-    while (currNodeOne !== null || currNodeTwo !== null) {
-        if (linkListOneLength > linkListTwoLength) {
-            linkListOneLength -= 1;
-            currNodeOne = currNodeOne.next;
-        } else if (linkListTwoLength > linkListOneLength) {
-            linkListTwoLength -= 1;
-            currNodeTwo = currNodeTwo.next;
-        } else {
-            if (JSON.stringify(currNodeOne) === JSON.stringify(currNodeTwo)) {
-                return currNodeOne;
+            if (stacks.length < stacksMaxLength) {
+                stackLimitIndex += stacksMaxLength;
+            } else {
+                stackLimitIndex = array.length;
             }
-
-            linkListOneLength -= 1;
-            linkListTwoLength -= 1;
-
-            currNodeOne = currNodeOne.next;
-            currNodeTwo = currNodeTwo.next;
         }
-    }
-}
+    });
 
+    return stacks;
+}
 
 const testCases = [
     // Normal
     // Data that is typical (expected) and should be accepted by the system.
     {
-        assert: JSON.stringify(
-            threeInOne(
-                { data: 1, next: { data: 2, next: { data: 3, next: { data: 4, next: null } } } },
-                { data: 0, next: { data: 1, next: { data: 2, next: { data: 3, next: { data: 4, next: null } } } } }
-            )
-        ),
-        expected: JSON.stringify({ data: 1, next: { data: 2, next: { data: 3, next: { data: 4, next: null } } } }),
+        assert: JSON.stringify(threeInOne([1, 2, 3, 4, 5, 6])),
+        expected: JSON.stringify([
+            { data: 2, next: { data: 1, next: null } },
+            { data: 4, next: { data: 3, next: null } },
+            { data: 6, next: { data: 5, next: null } }
+        ])
     },
     {
-        assert: JSON.stringify(
-            threeInOne(
-                { data: 0, next: { data: 1, next: { data: 2, next: { data: 3, next: { data: 4, next: { data: 5, next: null } } } } } },
-                { data: 2, next: { data: 3, next: { data: 4, next: { data: 5, next: null } } } }
-            )
-        ),
-        expected: JSON.stringify({ data: 2, next: { data: 3, next: { data: 4, next: { data: 5, next: null } } } }),
-    },
-    {
-        assert: threeInOne(
-            { data: 1, next: { data: 2, next: { data: 3, next: { data: 4, next: null } } } },
-            { data: 0, next: { data: 1, next: { data: 2, next: { data: 3, next: { data: 4, next: { data: 5, next: null } } } } } }
-        ),
-        expected: null,
-    },
-    {
-        assert: JSON.stringify(
-            threeInOne(
-                { data: 3, next: { data: 1, next: { data: 5, next: { data: 9, next: { data: 7, next: { data: 2, next: { data: 1, next: null } } } } } } },
-                { data: 4, next: { data: 6, next: { data: 7, next: { data: 2, next: { data: 1, next: null } } } } }
-            )
-        ),
-        expected: JSON.stringify({ data: 7, next: { data: 2, next: { data: 1, next: null } } }),
+        assert: JSON.stringify(threeInOne([1, 2, 3, 4, 5, 6, 7])),
+        expected: JSON.stringify([
+            { data: 2, next: { data: 1, next: null } },
+            { data: 4, next: { data: 3, next: null } },
+            { data: 7, next: { data: 6, next: { data: 5, next: null } } }
+        ])
     },
 
     // Boundary data (extreme data, edge case)
     // Data at the upper or lower limits of expectations that should be accepted by the system.
-    {
-        assert: JSON.stringify(threeInOne({ data: 1, next: null }, { data: 1, next: null })),
-        expected: JSON.stringify({ data: 1, next: null })
-    },
 
     // Abnormal data (erroneous data)
     // Data that falls outside of what is acceptable and should be rejected by the system.
-    { assert: threeInOne(), expected: false },
-    { assert: threeInOne(0), expected: false },
-    { assert: threeInOne(''), expected: false },
-    { assert: threeInOne([]), expected: false },
-    { assert: threeInOne({}), expected: false },
-    { assert: threeInOne(NaN), expected: false },
-    { assert: threeInOne(null), expected: false },
-    { assert: threeInOne(false), expected: false },
-    { assert: threeInOne(new Set()), expected: false },
-    { assert: threeInOne(new Map()), expected: false },
-    { assert: threeInOne(undefined), expected: false },
+    // { assert: threeInOne(), expected: false },
+    // { assert: threeInOne(0), expected: false },
+    // { assert: threeInOne(''), expected: false },
+    // { assert: threeInOne([]), expected: false },
+    // { assert: threeInOne({}), expected: false },
+    // { assert: threeInOne(NaN), expected: false },
+    // { assert: threeInOne(null), expected: false },
+    // { assert: threeInOne(false), expected: false },
+    // { assert: threeInOne(new Set()), expected: false },
+    // { assert: threeInOne(new Map()), expected: false },
+    // { assert: threeInOne(undefined), expected: false },
 ];
 
 // Run tests
